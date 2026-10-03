@@ -60,7 +60,10 @@ for (const p of appJson.pages || []) {
 }
 for (const t of (appJson.tabBar && appJson.tabBar.list) || []) {
   for (const k of ['iconPath', 'selectedIconPath']) {
-    if (t[k] && !fs.existsSync(path.join(ROOT, t[k]))) bad('缺图标 ' + t[k])
+    if (!t[k]) continue
+    // tabBar 图标必须用以 / 开头的绝对路径；相对路径如 images/x.png 在真机上会被忽略 → 破图
+    if (!t[k].startsWith('/')) bad('tabBar ' + k + ' 必须用绝对路径(/ 开头)，当前为相对路径: ' + t[k] + '（真机会显示破图）')
+    if (!fs.existsSync(path.join(ROOT, t[k]))) bad('缺图标 ' + t[k])
   }
 }
 if (problems === before) ok(appJson.pages.length + ' 个页面 + tabBar 图标都在')

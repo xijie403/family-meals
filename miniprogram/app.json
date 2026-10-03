@@ -23,32 +23,32 @@
       {
         "pagePath": "pages/home/home",
         "text": "首页",
-        "iconPath": "images/tab-home.png",
-        "selectedIconPath": "images/tab-home-on.png"
+        "iconPath": "/images/tab-home.png",
+        "selectedIconPath": "/images/tab-home-on.png"
       },
       {
         "pagePath": "pages/order/order",
         "text": "点菜",
-        "iconPath": "images/tab-order.png",
-        "selectedIconPath": "images/tab-order-on.png"
+        "iconPath": "/images/tab-order.png",
+        "selectedIconPath": "/images/tab-order-on.png"
       },
       {
         "pagePath": "pages/meals/meals",
         "text": "菜单",
-        "iconPath": "images/tab-menu.png",
-        "selectedIconPath": "images/tab-menu-on.png"
+        "iconPath": "/images/tab-menu.png",
+        "selectedIconPath": "/images/tab-menu-on.png"
       },
       {
         "pagePath": "pages/stats/stats",
         "text": "统计",
-        "iconPath": "images/tab-stats.png",
-        "selectedIconPath": "images/tab-stats-on.png"
+        "iconPath": "/images/tab-stats.png",
+        "selectedIconPath": "/images/tab-stats-on.png"
       },
       {
         "pagePath": "pages/dishes/dishes",
         "text": "菜谱",
-        "iconPath": "images/tab-book.png",
-        "selectedIconPath": "images/tab-book-on.png"
+        "iconPath": "/images/tab-book.png",
+        "selectedIconPath": "/images/tab-book-on.png"
       }
     ]
   },
