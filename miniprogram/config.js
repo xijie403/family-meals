@@ -37,7 +37,7 @@ module.exports = {
   useCloud: true,
 
   /** 留空则自动走本地存储兜底 */
-  cloudEnv: '',
+  cloudEnv: 'cloud1-d2g2gdc1y22d606d2',
 
   /** 首页封面文案。家庭名随意改成你家的叫法 */
   home: {
