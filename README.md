@@ -86,18 +86,31 @@ family-meals/
 本仓库已在本地打好版本 **v1.0.0**（见 `git tag`）：代码已 `git init`、提交、打标签。你只需把它推到自己的 GitHub，即可备份和二次开发。
 
 **方式一（推荐，图形界面，最简单）— GitHub Desktop：**
-1. 去 github.com 注册一个**免费**账号（约 5 分钟）。
-2. 安装 [GitHub Desktop](https://desktop.github.com/) → 登录。
-3. File → Add Local Repository → 选 `family-meals` 文件夹 → Add。
-4. 右上角 Publish → Repository name 填 `family-meals` → 选 **Private（私有，仅自己可见，更安全）** → Publish。
-5. 以后改完代码，写一句总结 → Commit → Push 即可。
+
+> 本仓库远端已配好 `https://github.com/xijie403/family-meals.git`，本地分支 `main` **领先远端若干提交**，只差一次 Push。
+
+1. 打开 GitHub Desktop 的欢迎页 → 点右下角 **Add an Existing Repository from your Local Drive...**
+   （也可以直接把 `family-meals` 文件夹拖进那个虚线框里）。
+2. 选**内层的 `family-meals` 文件夹**——就是里面有 `miniprogram/`、`README.md` 的那一层：
+   ```
+   /Users/xijie/workAI/workbuddy/小程序/家庭点餐/family-meals
+   ```
+   ⚠️ **别选外层的 `家庭点餐`**，那不是仓库根目录（选了会提示 "not a git repository"）。
+3. 按提示点 **Add Repository**。
+4. 主界面顶部会出现 **Push origin ↑N** → 点它，本地提交就全部推上去了。
+5. 打开 https://github.com/xijie403/family-meals 刷新，能看到最新提交即成功。
+
+⚠️ **不要点欢迎页底部那个高亮的「Clone xijie403/family-meals」**：
+克隆会把网上的旧版本下载到一个**新文件夹**，你就有了两份代码、以后容易改错地方。
+**你本地这份才是最新的。**
+
+**日常维护（以后每次改完代码，三步，不用输密码）：**
+打开 GitHub Desktop → 左下角 **Summary** 写一句人话（如"改了点菜页样式"）→ **Commit to main** → 右上角 **Push origin**。
 
 **方式二（命令行）：**
 ```bash
-# 在 family-meals 目录下
-git remote add origin https://github.com/<你的用户名>/family-meals.git
-git branch -M main
-git push -u origin main
+# 在 family-meals 目录下（远端已存在时，直接推即可）
+git push origin main
 git push --tags
 ```
 推上去后，在 GitHub 页面点 **Releases → Draft a new release → 选 v1.0.0 标签 → 发布**，就是一个正式的版本页。
