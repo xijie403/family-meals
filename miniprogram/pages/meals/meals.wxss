@@ -1,0 +1,284 @@
+/* ---------------- 时间筛选条（全部 / 过去 / 未来一周 / 一周以后） ---------------- */
+
+.flt {
+  display: flex;
+  gap: 10rpx;
+  padding: 12rpx 20rpx 4rpx;
+  /* 千万别加 overflow-x: auto —— 这 4 个胶囊原尺寸合起来约 770rpx，比 750rpx 屏宽多出一点，
+     view 一旦变成横向滚动容器，底部就会渲染出一条灰色滚动条，
+     用户看到的就是「全部按钮下面多了个灰色的东西」。
+     这里改成把内边距/字号收窄，保证 4 个一定放得下（约 680rpx）。 */
+}
+
+.flt-i {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 20rpx;
+  border-radius: 999rpx;
+  background: #fff;
+  box-shadow: 0 5rpx 14rpx rgba(178, 140, 102, 0.10);
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: all 0.18s ease;
+}
+
+.flt-i.on {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  box-shadow: 0 8rpx 18rpx rgba(255, 107, 44, 0.28);
+}
+
+/* 数量小胶囊：默认糖果底，选中时透明白底 */
+.flt-n {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: 999rpx;
+  padding: 0 10rpx;
+  line-height: 1.7;
+}
+
+.flt-i.on .flt-n {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.26);
+}
+
+/* 筛选后没有任何一天 */
+.flt-empty {
+  text-align: center;
+  font-size: 27rpx;
+  color: var(--muted);
+  padding: 130rpx 0 60rpx;
+}
+
+.daycard {
+  background: #fff;
+  border-radius: 30rpx;
+  box-shadow: var(--sh-1);
+  margin: 22rpx 26rpx 0;
+  overflow: hidden;
+}
+
+/* 过去的日子不做整卡置灰，只用日期旁的小标签区分 */
+
+.dc-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24rpx 28rpx 18rpx;
+}
+
+.dc-date {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  min-width: 0;
+}
+
+/* 右侧：N 道 + 删除。删除一律带二次确认，点了不会直接删 */
+.dc-right {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  flex-shrink: 0;
+}
+
+.dc-del {
+  font-size: 22rpx;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #C08D66;
+  background: #FFF3EC;
+  border-radius: 999rpx;
+  padding: 6rpx 18rpx;
+}
+
+.dc-del:active {
+  background: #FFE7DA;
+}
+
+.dc-md {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.dc-wd {
+  font-size: 22rpx;
+  color: var(--muted);
+}
+
+/* 标签三态：今天=橙色高亮，过去=灰色弱化，未来=淡蓝待吃 */
+.dc-rel {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  border-radius: 999rpx;
+  padding: 5rpx 18rpx;
+  line-height: 1.4;
+  box-shadow: 0 4rpx 10rpx rgba(255, 107, 44, 0.26);
+}
+
+.dc-rel.past {
+  color: #A08F7B;
+  background: #F4ECE2;
+  box-shadow: none;
+}
+
+.dc-rel.plan {
+  color: #3D8FD0;
+  background: #E9F4FD;
+  box-shadow: none;
+}
+
+.dc-count {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: 999rpx;
+  padding: 7rpx 20rpx;
+}
+
+.dc-body {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  padding: 2rpx 28rpx 24rpx;
+}
+
+/* 两列网格：图上名下，图片占满列宽 */
+.dcell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dthumb {
+  width: 100%;
+  height: 280rpx;
+  border-radius: 22rpx;
+  background: #F6EFE7;
+  object-fit: cover;
+  display: block;
+}
+
+.dthumb.mph {
+  background: #F6EFE7;
+}
+
+.dthumb.del {
+  background: #FBEFE8;
+}
+
+/* 文字在图片下方，字号偏小 */
+.dname {
+  font-size: 25rpx;
+  font-weight: 600;
+  color: var(--ink);
+  margin-top: 12rpx;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dname.del {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.dsub {
+  font-size: 19rpx;
+  color: var(--muted);
+  margin-top: 4rpx;
+}
+
+/* 每张卡片底部入口：文案与配色都随「过去 / 今天 / 未来」变化 */
+.dc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22rpx 28rpx;
+  background: #FFF8F1;
+  color: var(--brand-deep);
+  font-size: 26rpx;
+  font-weight: 700;
+  transition: background 0.14s ease;
+}
+
+.dc-foot:active {
+  background: #FFF1E4;
+}
+
+/* 过去：中性底 + 柔和棕字，弱化但不藏起入口（想补记昨天的菜随时能点） */
+.dc-foot.past {
+  background: #F8F3EC;
+  color: #8A7660;
+}
+
+.dc-foot.past:active {
+  background: #F1EAE0;
+}
+
+/* 未来（提前安排）：淡蓝底，和过去一眼区分 */
+.dc-foot.plan {
+  background: #F1F7FD;
+  color: #3D8FD0;
+}
+
+.dc-foot.plan:active {
+  background: #E7F2FB;
+}
+
+.dc-foot .arrow {
+  font-size: 34rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.foot-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 23rpx;
+  line-height: 1.6;
+  color: var(--muted);
+  padding: 36rpx 30rpx 12rpx;
+}
+
+/* 一行一条说明：左边一个和日卡标签同色的小圆点，右边文案（灰=吃过 / 蓝=提前安排） */
+.fh-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 8rpx;
+}
+
+.fh-row:first-child {
+  margin-top: 0;
+}
+
+.fh-dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.fh-dot.past {
+  background: #C0AA92;
+}
+
+.fh-dot.plan {
+  background: #7FB5E5;
+}
+
+.pad {
+  height: 40rpx;
+}

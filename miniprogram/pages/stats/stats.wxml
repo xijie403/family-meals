@@ -1,0 +1,102 @@
+<view class="page">
+  <view class="hd">
+    <view class="hd-title"><text class="hd-emo">🏆</text>美食排行榜</view>
+    <view class="hd-sub">看看谁是我们家吃得最多的～</view>
+  </view>
+
+  <block wx:if="{{all.days === 0}}">
+    <view class="empty">
+      <view>还没有点过菜</view>
+      <view class="hint">去「点菜」选几道，之后这里就会有排行</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="metrics">
+      <view class="metric">
+        <view class="m-label">本周</view>
+        <view class="m-num">{{week.dishes}}</view>
+        <view class="m-foot">道 · {{week.days}} 天</view>
+      </view>
+      <view class="metric">
+        <view class="m-label">本月</view>
+        <view class="m-num">{{month.dishes}}</view>
+        <view class="m-foot">道 · {{month.days}} 天</view>
+      </view>
+      <view class="metric">
+        <view class="m-label">累计</view>
+        <view class="m-num">{{all.dishes}}</view>
+        <view class="m-foot">道 · {{all.days}} 天</view>
+      </view>
+    </view>
+
+    <view class="range">
+      <view class="r-item {{range === 'week' ? 'on' : ''}}" data-r="week" bindtap="setRange">本周</view>
+      <view class="r-item {{range === 'month' ? 'on' : ''}}" data-r="month" bindtap="setRange">本月</view>
+      <view class="r-item {{range === 'all' ? 'on' : ''}}" data-r="all" bindtap="setRange">全部</view>
+    </view>
+
+    <view class="sec">这段时间点了 {{rangeDays}} 天</view>
+
+    <!-- 排名口径：早餐品种少，单独排一次，不然会被正餐淹没 -->
+    <view class="meal-sw">
+      <view class="ms {{meal === 'normal' ? 'on' : ''}}" data-m="normal" bindtap="setMeal">
+        <text class="ms-ico">🍚</text>
+        <text>正餐</text>
+        <text class="ms-n">{{rankNormal.length}}</text>
+      </view>
+      <view class="ms {{meal === 'breakfast' ? 'on' : ''}}" data-m="breakfast" bindtap="setMeal">
+        <text class="ms-ico">🥐</text>
+        <text>早餐</text>
+        <text class="ms-n">{{rankBreakfast.length}}</text>
+      </view>
+    </view>
+
+    <view class="card-box" wx:if="{{rank.length}}">
+      <view class="rk" wx:for="{{rank}}" wx:key="id">
+        <view class="rk-no {{index < 3 ? 'top' : ''}}">{{index + 1}}</view>
+        <image wx:if="{{item.cover}}" class="rk-img" src="{{item.cover}}" mode="aspectFill" />
+        <view wx:else class="rk-img rk-ph"></view>
+        <view class="rk-main">
+          <view class="rk-title">
+            <text class="rk-name">{{item.name}}</text>
+            <text class="rk-cat">{{item.cat}}</text>
+          </view>
+          <view class="rk-bar">
+            <view class="rk-fill" style="width: {{item.pct}}%"></view>
+          </view>
+        </view>
+        <view class="rk-count">{{item.count}} 次</view>
+      </view>
+    </view>
+
+    <view class="hint" wx:else>{{meal === 'breakfast' ? '这段时间还没点过早餐呢 🥐' : '这段时间还没点过正餐呢 🍚'}}</view>
+
+    <!-- 按分类看：每个分类下逐道菜统计次数（早餐 → 小馄饨 3 次、面条 2 次） -->
+    <block wx:if="{{groups.length}}">
+      <view class="sec">按分类看</view>
+      <view class="g-tip">每个分类下面，逐道菜数一数被点了几次</view>
+
+      <view class="gbox" wx:for="{{groups}}" wx:key="key">
+        <view class="g-hd">
+          <image wx:if="{{item.icon}}" class="g-ico" src="{{item.icon}}" />
+          <view wx:else class="g-ico g-ico-ph"></view>
+          <view class="g-name">{{item.label}}</view>
+          <view class="g-total">{{item.total}} 次</view>
+        </view>
+
+        <view class="g-row" wx:for="{{item.items}}" wx:for-item="d" wx:key="id">
+          <image wx:if="{{d.cover}}" class="g-img" src="{{d.cover}}" mode="aspectFill" />
+          <view wx:else class="g-img g-ph"></view>
+          <view class="g-main">
+            <view class="g-rname">{{d.name}}</view>
+            <view class="g-bar">
+              <view class="g-fill" style="width: {{d.pct}}%"></view>
+            </view>
+          </view>
+          <view class="g-count">{{d.count}} 次</view>
+        </view>
+      </view>
+    </block>
+  </block>
+</view>

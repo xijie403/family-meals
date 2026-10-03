@@ -1,0 +1,353 @@
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18rpx;
+  padding: 20rpx 26rpx 4rpx;
+}
+
+.metric {
+  border-radius: 28rpx;
+  padding: 26rpx 12rpx;
+  text-align: center;
+}
+
+/* 三张卡各给一个糖果色，比清一色好看 */
+.metric:nth-child(1) {
+  background: linear-gradient(160deg, #EAF4FF, #DCEBFB);
+  box-shadow: 0 8rpx 20rpx rgba(79, 168, 232, 0.16);
+}
+
+.metric:nth-child(2) {
+  background: linear-gradient(160deg, #EAF7EC, #DCEFDF);
+  box-shadow: 0 8rpx 20rpx rgba(79, 184, 95, 0.16);
+}
+
+.metric:nth-child(3) {
+  background: linear-gradient(160deg, #FFF1E5, #FFE4D0);
+  box-shadow: 0 8rpx 20rpx rgba(255, 140, 70, 0.18);
+}
+
+.m-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #8A7660;
+}
+
+.m-num {
+  font-size: 54rpx;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #C9501A;
+}
+
+.metric:nth-child(1) .m-num {
+  color: #3E8FD0;
+}
+
+.metric:nth-child(2) .m-num {
+  color: #3F9E50;
+}
+
+.m-foot {
+  font-size: 22rpx;
+  color: var(--muted);
+}
+
+.range {
+  display: flex;
+  gap: 14rpx;
+  padding: 26rpx 26rpx 6rpx;
+}
+
+.r-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 999rpx;
+  background: #fff;
+  box-shadow: 0 5rpx 14rpx rgba(178, 140, 102, 0.10);
+  font-size: 27rpx;
+  font-weight: 600;
+  color: #8A7660;
+  transition: all 0.18s ease;
+}
+
+.r-item.on {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  box-shadow: 0 8rpx 18rpx rgba(255, 107, 44, 0.28);
+  color: #fff;
+}
+
+.sec {
+  padding: 30rpx 30rpx 12rpx;
+  font-size: 27rpx;
+  font-weight: 700;
+  color: var(--ink-2);
+}
+
+/* ---------------- 排名口径切换：正餐 / 早餐 ---------------- */
+
+.meal-sw {
+  display: flex;
+  gap: 16rpx;
+  padding: 4rpx 26rpx 6rpx;
+}
+
+.ms {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+  padding: 18rpx 0;
+  border-radius: 999rpx;
+  background: #fff;
+  box-shadow: 0 5rpx 14rpx rgba(178, 140, 102, 0.10);
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--ink-2);
+  transition: all 0.18s ease;
+}
+
+.ms.on {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  box-shadow: 0 10rpx 22rpx rgba(255, 107, 44, 0.30);
+}
+
+.ms-ico {
+  font-size: 34rpx;
+  line-height: 1;
+}
+
+.ms-n {
+  font-size: 21rpx;
+  font-weight: 700;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: 999rpx;
+  padding: 0 12rpx;
+  line-height: 1.7;
+}
+
+.ms.on .ms-n {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.card-box {
+  background: #fff;
+  border-radius: 30rpx;
+  box-shadow: var(--sh-1);
+  margin: 0 26rpx;
+  overflow: hidden;
+}
+
+.rk {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 24rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.rk:last-child {
+  border-bottom: none;
+}
+
+.rk-no {
+  width: 46rpx;
+  height: 46rpx;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #F6EDE4;
+  text-align: center;
+  font-size: 25rpx;
+  font-weight: 700;
+  color: #A08F7B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rk-no.top {
+  background: linear-gradient(160deg, #FFC24A, #FFAE1A);
+  color: #fff;
+  box-shadow: 0 4rpx 10rpx rgba(255, 174, 26, 0.34);
+}
+
+.rk-img {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 20rpx;
+  flex-shrink: 0;
+  background: #F6EFE7;
+}
+
+.rk-ph {
+  background: #F6EFE7;
+}
+
+.rk-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.rk-title {
+  display: flex;
+  align-items: baseline;
+  gap: 12rpx;
+}
+
+.rk-name {
+  font-size: 29rpx;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rk-cat {
+  font-size: 21rpx;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.rk-bar {
+  height: 14rpx;
+  border-radius: 999rpx;
+  background: #F6EDE4;
+  margin-top: 10rpx;
+  overflow: hidden;
+}
+
+.rk-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFB07A, #FF7A33);
+  border-radius: 999rpx;
+  min-width: 10rpx;
+}
+
+.rk-count {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--brand-deep);
+  flex-shrink: 0;
+  min-width: 74rpx;
+  text-align: right;
+}
+
+/* ---------------- 按分类看：分类卡 + 组内逐道菜 ---------------- */
+
+.g-tip {
+  font-size: 23rpx;
+  color: var(--muted);
+  padding: 0 30rpx 16rpx;
+}
+
+.gbox {
+  background: #fff;
+  border-radius: 30rpx;
+  box-shadow: var(--sh-1);
+  margin: 0 26rpx 20rpx;
+  padding: 22rpx 24rpx 8rpx;
+}
+
+.g-hd {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
+.g-ico {
+  width: 54rpx;
+  height: 54rpx;
+  display: block;
+  flex-shrink: 0;
+}
+
+.g-ico-ph {
+  border-radius: 50%;
+  background: #F1E7DC;
+}
+
+.g-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.g-total {
+  flex-shrink: 0;
+  font-size: 21rpx;
+  font-weight: 600;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: 999rpx;
+  padding: 6rpx 16rpx;
+}
+
+/* 分类卡内的逐道菜列表 */
+.g-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid var(--line);
+}
+
+.g-row:last-child {
+  border-bottom: none;
+}
+
+.g-img {
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 18rpx;
+  flex-shrink: 0;
+  background: #F6EFE7;
+}
+
+.g-ph {
+  background: #F6EFE7;
+}
+
+.g-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.g-rname {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.g-bar {
+  height: 12rpx;
+  border-radius: 999rpx;
+  background: #F6EDE4;
+  margin-top: 10rpx;
+  overflow: hidden;
+}
+
+.g-fill {
+  height: 100%;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #FFD08A, #FF9A4D);
+  min-width: 10rpx;
+}
+
+.g-count {
+  flex-shrink: 0;
+  min-width: 70rpx;
+  text-align: right;
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--brand-deep);
+}

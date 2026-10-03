@@ -1,0 +1,58 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/order/order",
+    "pages/dishes/dishes",
+    "pages/meals/meals",
+    "pages/stats/stats",
+    "pages/dish-edit/dish-edit"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FF7A33",
+    "navigationBarTitleText": "栖栖家的菜谱",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFF7EE"
+  },
+  "tabBar": {
+    "color": "#9C8E7C",
+    "selectedColor": "#FF7A33",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-on.png"
+      },
+      {
+        "pagePath": "pages/order/order",
+        "text": "点菜",
+        "iconPath": "images/tab-order.png",
+        "selectedIconPath": "images/tab-order-on.png"
+      },
+      {
+        "pagePath": "pages/meals/meals",
+        "text": "菜单",
+        "iconPath": "images/tab-menu.png",
+        "selectedIconPath": "images/tab-menu-on.png"
+      },
+      {
+        "pagePath": "pages/stats/stats",
+        "text": "统计",
+        "iconPath": "images/tab-stats.png",
+        "selectedIconPath": "images/tab-stats-on.png"
+      },
+      {
+        "pagePath": "pages/dishes/dishes",
+        "text": "菜谱",
+        "iconPath": "images/tab-book.png",
+        "selectedIconPath": "images/tab-book-on.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,249 @@
+/* 有菜时用「撑满一屏的左右分栏」；没菜时保持普通流式布局，
+   否则空状态会被 100vh 的容器裁掉。 */
+
+.page.full {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  background: var(--bg);
+}
+
+.hd {
+  flex-shrink: 0;
+  padding-bottom: 6rpx;
+}
+
+.search {
+  flex-shrink: 0;
+  padding: 12rpx 26rpx 18rpx;
+}
+
+.search-input {
+  display: block;
+  width: 100%;
+  height: 88rpx;
+  box-sizing: border-box;
+  padding: 0 34rpx;
+  background: #fff;
+  box-shadow: 0 6rpx 18rpx rgba(178, 140, 102, 0.11);
+  border-radius: 999rpx;
+  font-size: 28rpx;
+  color: var(--ink);
+}
+
+.ph {
+  color: var(--muted);
+  font-size: 28rpx;
+}
+
+.search-line {
+  font-size: 24rpx;
+  color: var(--muted);
+  padding: 2rpx 26rpx 14rpx;
+}
+
+/* ---------------- 左分类 / 右列表 ---------------- */
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.side {
+  width: 184rpx;
+  flex-shrink: 0;
+  background: #FFF4EA;
+  height: 100%;
+  padding: 12rpx 0;
+  box-sizing: border-box;
+}
+
+/* 与点菜页同一套：图标在上、文字在下 */
+.side-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  margin: 0 12rpx 8rpx;
+  padding: 16rpx 6rpx;
+  border-radius: 26rpx;
+  font-size: 25rpx;
+  font-weight: 600;
+  color: #9A8570;
+  transition: all 0.18s ease;
+}
+
+.side-ico {
+  width: 50rpx;
+  height: 50rpx;
+  flex-shrink: 0;
+  display: block;
+}
+
+.side-txt {
+  line-height: 1.2;
+}
+
+/* 选中分类：白色浮起的小卡 */
+.side-item.on {
+  background: #fff;
+  color: var(--brand-deep);
+  font-weight: 700;
+  box-shadow: 0 8rpx 20rpx rgba(255, 150, 90, 0.22);
+}
+
+.main {
+  flex: 1;
+  background: transparent;
+  height: 100%;
+  padding: 2rpx 0 0;
+  box-sizing: border-box;
+}
+
+/* ---------------- 分组标题（与点菜页一致） ---------------- */
+
+.sec {
+  padding-bottom: 4rpx;
+}
+
+.sec-hd {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 18rpx 26rpx 10rpx;
+}
+
+.sec-ico {
+  width: 42rpx;
+  height: 42rpx;
+  flex-shrink: 0;
+  display: block;
+}
+
+.sec-name {
+  font-size: 29rpx;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sec-n {
+  font-size: 22rpx;
+  color: var(--muted);
+}
+
+/* ---------------- 列表行 ---------------- */
+
+.row-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.thumb {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 22rpx;
+}
+
+.thumb-ph {
+  background: #F6EFE7;
+}
+
+.arrow {
+  color: #E0D2C0;
+  font-size: 40rpx;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 调顺序按钮：本分类内「上移一位」「挪到最前」。
+   用 catchtap，避免连带触发整行的「点一下改」。 */
+.row-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.rb {
+  width: 84rpx;
+  padding: 8rpx 0;
+  text-align: center;
+  font-size: 20rpx;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--brand-deep);
+  background: var(--brand-soft);
+  border-radius: 14rpx;
+}
+
+.rb:active {
+  transform: scale(0.94);
+}
+
+/* 已经是本分类第一道：按钮置灰，点了也不会动 */
+.rb.off {
+  color: #D5C8B8;
+  background: #F8F3ED;
+}
+
+.list-empty {
+  padding: 120rpx 26rpx;
+  text-align: center;
+  color: var(--muted);
+  font-size: 26rpx;
+}
+
+.le-t {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.le-s {
+  font-size: 24rpx;
+  color: var(--muted);
+  margin-top: 10rpx;
+  line-height: 1.7;
+}
+
+/* 给固定在底部的操作条让位 */
+.pad {
+  height: 200rpx;
+}
+
+/* ---------------- 底部操作条 ---------------- */
+
+.act-row {
+  display: flex;
+  gap: 20rpx;
+}
+
+.act {
+  flex: 1;
+  height: 104rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 700;
+  box-shadow: var(--sh-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.14s ease;
+}
+
+.act:active {
+  transform: translateY(2rpx) scale(0.99);
+}
+
+.act.ghost {
+  background: #fff;
+  color: var(--brand);
+  box-shadow: var(--sh-2);
+}

@@ -1,0 +1,222 @@
+<view class="page">
+  <!-- 页面标题：与「菜单 / 统计 / 菜谱」保持同一套头部结构，右侧多一个搜菜入口 -->
+  <view class="hd">
+    <view class="hd-row">
+      <view class="hd-l">
+        <view class="hd-title"><text class="hd-emo">🍚</text>今天想吃点啥</view>
+        <view class="hd-sub">{{searching ? '搜到 ' + hitCount + ' 道菜' : topTip}}</view>
+      </view>
+      <view class="hd-search {{searchOpen ? 'on' : ''}}" bindtap="toggleSearch">
+        <view class="si"><view class="si-lens"></view><view class="si-grip"></view></view>
+        <text>{{searchOpen ? '收起' : '搜菜'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索框：菜一多，直接按菜名或食材找 -->
+  <view class="sbar" wx:if="{{searchOpen}}">
+    <view class="sbar-box">
+      <view class="si si-grey"><view class="si-lens"></view><view class="si-grip"></view></view>
+      <input
+        class="sbar-input"
+        value="{{kw}}"
+        focus="{{focusSearch}}"
+        placeholder="搜菜名或食材，如「面条」"
+        placeholder-class="sbar-ph"
+        confirm-type="search"
+        bindinput="onKw"
+      />
+      <view class="sbar-clear" wx:if="{{kw}}" bindtap="clearKw">✕</view>
+    </view>
+    <view class="sbar-cancel" bindtap="closeSearch">取消</view>
+  </view>
+
+  <!-- 日期条 + 右侧「更多」。
+       条上只放日期格，不多放别的按钮：右边多一个按钮就会挤掉半格日期，
+       变成「卡片被切一半」。要回到今天 → 点「更多」开日历，底部有「回到今天」。 -->
+  <view class="days-wrap">
+    <!-- 外面这层可收缩的盒子是必须的：见 order.wxss 里 .days-box 的注释 -->
+    <view class="days-box">
+      <scroll-view
+        class="days"
+        scroll-x="{{true}}"
+        enhanced="{{true}}"
+        show-scrollbar="{{false}}"
+        scroll-into-view="{{scrollTo}}"
+        scroll-with-animation="{{true}}"
+      >
+        <view
+          wx:for="{{days}}"
+          wx:key="date"
+          id="c{{index}}"
+          class="day {{item.date === date ? 'on' : ''}} {{item.past ? 'past' : ''}}"
+          data-d="{{item.date}}"
+          bindtap="pickDate"
+        >
+          <view class="day-tag">{{item.tag}}</view>
+          <view class="day-num">{{item.num}}</view>
+          <view class="day-dot {{item._n ? 'has' : ''}}"></view>
+        </view>
+      </scroll-view>
+      <!-- 右边缘这层同色遮罩：把「第 7 天被切掉一半」的残影盖掉，
+           保证默认看到的 6 天（前天…后天）每一格都是完整的 -->
+      <view class="days-fade"></view>
+    </view>
+
+    <!-- 更远的日期交给日历：点开可以前后翻月，前后各一年都能选 -->
+    <view class="pick more" bindtap="openCal">更多</view>
+  </view>
+
+  <!-- 左分类 + 右菜品（按分类分组，滑动时左右联动；搜索态收起分类栏，给结果让位） -->
+  <view class="body" wx:if="{{total > 0}}">
+    <scroll-view class="side" scroll-y="{{true}}" wx:if="{{!searching}}">
+      <view
+        wx:for="{{sideCats}}"
+        wx:key="key"
+        class="side-item {{spyKey === item.key ? 'on' : ''}}"
+        data-cat="{{item.key}}"
+        bindtap="pickCat"
+      >
+        <image class="side-ico" src="{{spyKey === item.key ? item.iconOn : item.icon}}" />
+        <view class="side-txt">{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <scroll-view
+      class="main"
+      scroll-y="{{true}}"
+      scroll-into-view="{{mainTo}}"
+      scroll-with-animation="{{true}}"
+      bindscroll="onMainScroll"
+    >
+      <!-- 搜索态：跨分类的扁平结果 -->
+      <block wx:if="{{searching}}">
+        <view class="search-line">全部分类 · 找到 {{hitCount}} 道</view>
+        <view class="grid">
+          <view
+            wx:for="{{list}}"
+            wx:key="_id"
+            class="card {{seq[item._id] ? 'on' : ''}}"
+            data-id="{{item._id}}"
+            bindtap="toggle"
+          >
+            <image wx:if="{{item.cover}}" class="card-img" src="{{item.cover}}" mode="aspectFill" />
+            <view wx:else class="card-img card-ph"></view>
+            <view class="badge-seq {{seq[item._id] ? '' : 'off'}}">{{seq[item._id] ? seq[item._id] : '+'}}</view>
+            <view class="card-name">{{item.name}}</view>
+            <view class="card-sub">{{item._cat}}</view>
+          </view>
+        </view>
+      </block>
+
+      <!-- 常规态：按左侧分类顺序分组，滑到哪一组左侧就亮哪一组 -->
+      <block wx:else>
+        <view class="sec" wx:for="{{groups}}" wx:key="key" wx:for-item="g" id="sec-{{g.key}}">
+          <view class="sec-hd">
+            <image class="sec-ico" src="{{g.iconOn}}" />
+            <text class="sec-name">{{g.label}}</text>
+            <text class="sec-n">{{g.list.length}} 道</text>
+          </view>
+          <view class="grid">
+            <view
+              wx:for="{{g.list}}"
+              wx:key="_id"
+              class="card {{seq[item._id] ? 'on' : ''}}"
+              data-id="{{item._id}}"
+              bindtap="toggle"
+            >
+              <image wx:if="{{item.cover}}" class="card-img" src="{{item.cover}}" mode="aspectFill" />
+              <view wx:else class="card-img card-ph"></view>
+              <view class="badge-seq {{seq[item._id] ? '' : 'off'}}">{{seq[item._id] ? seq[item._id] : '+'}}</view>
+              <view class="card-name">{{item.name}}</view>
+              <view class="card-sub">{{item._cat}}</view>
+            </view>
+          </view>
+        </view>
+      </block>
+
+      <view class="list-empty" wx:if="{{searching && list.length === 0}}">
+        <view class="le-t">没找到「{{kw}}」</view>
+        <view class="le-s">换个词试试，或者去「菜谱」把它加进来</view>
+      </view>
+      <view class="pad"></view>
+    </scroll-view>
+  </view>
+
+  <view class="empty" wx:if="{{total === 0 && !loading}}">
+    <view>菜谱还是空的</view>
+    <view class="btn" bindtap="goDishes">去添加妈妈会做的菜</view>
+  </view>
+
+  <!-- 底部入口：点开就是「已点菜单」，只是看一眼 / 去掉某道菜，没有「确定」这一步 -->
+  <view class="bar-wrap" wx:if="{{total > 0}}">
+    <view class="bar {{picked.length ? 'solid' : ''}}" bindtap="openSheet">
+      <text>{{barText}}</text>
+      <text>{{barHint}} ›</text>
+    </view>
+  </view>
+
+  <!-- 已点菜单弹层：只用来「看」和「去掉某道菜」。
+       点菜页每点一下就自动存好了，所以这里不需要「确定」按钮。
+       想全清空 → 顶部「清空」；想关掉 → ✕ 或点空白处。 -->
+  <view class="sheet-mask {{sheet ? 'on' : ''}}" bindtap="closeSheet"></view>
+  <view class="sheet {{sheet ? 'up' : ''}}">
+    <view class="sheet-hd">
+      <view class="sheet-hd-l">
+        <view class="sheet-ttl">{{desc.md}} 的菜单</view>
+        <view class="sheet-sub">{{rel}} · 共 {{picked.length}} 道 · 选完自动保存</view>
+      </view>
+      <view class="sheet-clear" wx:if="{{picked.length}}" bindtap="clearPick">清空</view>
+      <view class="sheet-x" bindtap="closeSheet">✕</view>
+    </view>
+
+    <scroll-view class="sheet-body" scroll-y="{{true}}">
+      <view wx:for="{{menu}}" wx:key="_id" class="mrow">
+        <view class="mseq">{{item._seq}}</view>
+        <image wx:if="{{item.cover}}" class="mthumb" src="{{item.cover}}" mode="aspectFill" />
+        <view wx:else class="mthumb mph"></view>
+        <view class="mmain">
+          <view class="mname">{{item.name}}</view>
+          <view class="msub">{{item._cat}}</view>
+        </view>
+        <view class="mdel" data-id="{{item._id}}" catchtap="removeOne">×</view>
+      </view>
+
+      <view class="sheet-empty" wx:if="{{menu.length === 0}}">
+        这一天还没点菜，关掉这里去挑几道吧
+      </view>
+      <view class="mpad"></view>
+    </scroll-view>
+  </view>
+
+  <!-- 日历弹层：「更多」打开。前后翻月，点某天直接定位；小圆点表示那天已经点过菜 -->
+  <view class="sheet-mask {{cal ? 'on' : ''}}" bindtap="closeCal"></view>
+  <view class="cal {{cal ? 'up' : ''}}">
+    <view class="cal-hd">
+      <view class="cal-nav" bindtap="calPrev">‹</view>
+      <view class="cal-title">{{calTitle}}</view>
+      <view class="cal-nav" bindtap="calNext">›</view>
+    </view>
+
+    <view class="cal-wds">
+      <view class="cal-wd" wx:for="{{['日','一','二','三','四','五','六']}}" wx:key="*this">{{item}}</view>
+    </view>
+
+    <view class="cal-grid">
+      <view
+        wx:for="{{calCells}}"
+        wx:key="k"
+        class="cal-c {{item.blank ? 'blank' : ''}} {{item.sel ? 'sel' : ''}} {{item.today ? 'today' : ''}} {{item.past ? 'past' : ''}} {{item.off ? 'off' : ''}}"
+        data-d="{{item.d}}"
+        catchtap="calPick"
+      >
+        <view class="cal-n">{{item.blank ? '' : item.num}}</view>
+        <view class="cal-dot" wx:if="{{item.has}}"></view>
+      </view>
+    </view>
+
+    <view class="cal-ft">
+      <view class="cal-today" bindtap="calToday">回到今天</view>
+    </view>
+  </view>
+</view>

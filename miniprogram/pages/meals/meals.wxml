@@ -1,0 +1,79 @@
+<view class="page">
+  <view class="hd">
+    <view class="hd-title"><text class="hd-emo">🍱</text>咱家吃过的菜</view>
+    <view class="hd-sub" wx:if="{{list.length}}">按天记着你点过的菜 · 共 {{totalDays}} 天 · {{totalDishes}} 道</view>
+    <view class="hd-sub" wx:else>还没有点过菜</view>
+  </view>
+
+  <!-- 时间筛选：远的安排可以先不看，只看最近要吃的 -->
+  <view class="flt" wx:if="{{list.length}}">
+    <view class="flt-i {{flt === 'all' ? 'on' : ''}}" data-f="all" bindtap="setFlt">
+      <text>全部</text><text class="flt-n">{{fltCounts.all}}</text>
+    </view>
+    <view class="flt-i {{flt === 'past' ? 'on' : ''}}" data-f="past" bindtap="setFlt">
+      <text>过去</text><text class="flt-n">{{fltCounts.past}}</text>
+    </view>
+    <view class="flt-i {{flt === 'soon' ? 'on' : ''}}" data-f="soon" bindtap="setFlt">
+      <text>未来一周</text><text class="flt-n">{{fltCounts.soon}}</text>
+    </view>
+    <view class="flt-i {{flt === 'far' ? 'on' : ''}}" data-f="far" bindtap="setFlt">
+      <text>一周以后</text><text class="flt-n">{{fltCounts.far}}</text>
+    </view>
+  </view>
+
+  <block wx:if="{{list.length}}">
+    <view class="daycard" wx:for="{{fltList}}" wx:key="date">
+      <view class="dc-hd">
+        <view class="dc-date">
+          <text class="dc-md">{{item.md}}</text>
+          <text class="dc-wd">{{item.wd}}</text>
+          <text class="dc-rel {{item.tone}}" wx:if="{{item.label}}">{{item.label}}</text>
+        </view>
+        <view class="dc-right">
+          <view class="dc-count">{{item.count}} 道</view>
+          <view
+            class="dc-del"
+            data-date="{{item.date}}"
+            data-md="{{item.md}}"
+            data-count="{{item.count}}"
+            catchtap="delDay"
+          >删除</view>
+        </view>
+      </view>
+
+      <view class="dc-body">
+        <view class="dcell" wx:for="{{item.items}}" wx:for-item="d" wx:key="_id">
+          <image wx:if="{{d.cover}}" class="dthumb" src="{{d.cover}}" mode="aspectFill" />
+          <view wx:else class="dthumb mph {{d.ok ? '' : 'del'}}"></view>
+          <view class="dname {{d.ok ? '' : 'del'}}">{{d.name}}</view>
+          <view class="dsub" wx:if="{{d.cat}}">{{d.cat}}</view>
+        </view>
+      </view>
+
+      <view class="dc-foot {{item.tone}}" data-date="{{item.date}}" bindtap="goDay">
+        <text>{{item.foot}}</text>
+        <text class="arrow">›</text>
+      </view>
+    </view>
+
+    <view class="flt-empty" wx:if="{{fltList.length === 0}}">这段时间还没有安排 🍃</view>
+
+    <view class="foot-hint" wx:if="{{fltList.length}}">
+      <view class="fh-row">
+        <view class="fh-dot past"></view>
+        <text>灰色标签是吃过的日子，可以补记漏掉的菜</text>
+      </view>
+      <view class="fh-row">
+        <view class="fh-dot plan"></view>
+        <text>蓝色标签是提前安排的日子</text>
+      </view>
+    </view>
+    <view class="pad"></view>
+  </block>
+
+  <view class="empty" wx:else>
+    <view>还没有点过菜</view>
+    <view class="hint">去「点菜」选几道，之后这里就会按天列出你吃过的菜</view>
+    <view class="btn" bindtap="goOrder">去点菜</view>
+  </view>
+</view>

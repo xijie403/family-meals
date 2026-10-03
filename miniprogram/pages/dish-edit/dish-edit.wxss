@@ -1,0 +1,130 @@
+.batch-tip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 18rpx 26rpx 0;
+  padding: 20rpx 28rpx;
+  border-radius: 999rpx;
+  background: var(--brand-soft);
+  color: #B8541F;
+  font-size: 26rpx;
+  font-weight: 600;
+  box-shadow: 0 6rpx 16rpx rgba(255, 140, 70, 0.14);
+}
+
+.batch-skip {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.picker {
+  margin: 24rpx 26rpx;
+}
+
+.cover {
+  width: 100%;
+  height: 420rpx;
+  border-radius: 30rpx;
+  background: #F6EFE7;
+  display: block;
+  box-shadow: var(--sh-1);
+}
+
+.cover-ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3rpx dashed #EBDCC8;
+  box-sizing: border-box;
+  background: #FFFCF8;
+  box-shadow: none;
+}
+
+.cover-ph-txt {
+  color: var(--muted);
+  font-size: 28rpx;
+}
+
+.field {
+  padding: 22rpx 26rpx 8rpx;
+}
+
+.label {
+  font-size: 27rpx;
+  font-weight: 700;
+  color: var(--ink-2);
+  margin-bottom: 16rpx;
+}
+
+.label-opt {
+  margin-left: 12rpx;
+  font-size: 22rpx;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+/* 输入框统一走 app.wxss 的 .f-input / .f-input-ph，
+   这里不要再写上下 padding 的 input 样式（安卓会把文字裁掉） */
+
+.cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 14rpx 28rpx 14rpx 18rpx;
+  border-radius: 999rpx;
+  background: #fff;
+  box-shadow: 0 5rpx 14rpx rgba(178, 140, 102, 0.10);
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--ink-2);
+  transition: all 0.16s ease;
+}
+
+.cat-ico {
+  width: 44rpx;
+  height: 44rpx;
+  display: block;
+  flex-shrink: 0;
+}
+
+.pill.on {
+  background: var(--brand-soft);
+  color: var(--brand-deep);
+  box-shadow: 0 8rpx 18rpx rgba(255, 140, 70, 0.24);
+}
+
+.tip {
+  font-size: 22rpx;
+  color: var(--muted);
+  margin-top: 12rpx;
+}
+
+.del-box {
+  padding: 40rpx 26rpx 0;
+}
+
+.del {
+  text-align: center;
+  color: #D14A3E;
+  font-size: 28rpx;
+  font-weight: 600;
+  padding: 26rpx 0;
+  border-radius: 999rpx;
+  background: #fff;
+  box-shadow: 0 6rpx 18rpx rgba(209, 74, 62, 0.14);
+}
+
+.del:active {
+  transform: scale(0.985);
+}
+
+/* 保存条只有一个按钮，居中显示 */
+.bar.solid {
+  justify-content: center;
+}

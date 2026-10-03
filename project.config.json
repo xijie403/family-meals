@@ -1,0 +1,43 @@
+{
+  "description": "家庭点餐 - 先点明天的菜，再去买菜（代码在 miniprogram/ 子目录）",
+  "projectname": "family-meals",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "appid": "wx00de802bba8dd8c5",
+  "libVersion": "3.17.3",
+  "setting": {
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "enhance": true,
+    "urlCheck": true,
+    "bigPackageSizeSupport": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "packNpmRelationList": [],
+    "useCompilerPlugins": false,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "condition": false
+  },
+  "packOptions": {
+    "ignore": [
+      {
+        "value": ".tmp",
+        "type": "folder"
+      }
+    ],
+    "include": []
+  },
+  "editorSetting": {},
+  "simulatorPluginLibVersion": {}
+}

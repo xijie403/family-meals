@@ -1,0 +1,130 @@
+.home {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(180deg, #E4F3FF 0%, #FFF7E8 44%, #FFE2C2 100%);
+}
+
+/* 背景气泡 */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0.55;
+}
+
+.b1 {
+  width: 320rpx;
+  height: 320rpx;
+  left: -90rpx;
+  top: 110rpx;
+}
+
+.b2 {
+  width: 210rpx;
+  height: 210rpx;
+  right: -50rpx;
+  top: 250rpx;
+  opacity: 0.48;
+}
+
+.b3 {
+  width: 140rpx;
+  height: 140rpx;
+  left: 110rpx;
+  bottom: 160rpx;
+  opacity: 0.42;
+}
+
+/* 星星点缀 */
+.sp {
+  position: absolute;
+  color: #FFC94A;
+}
+
+.s1 {
+  left: 96rpx;
+  top: 200rpx;
+  font-size: 42rpx;
+}
+
+.s2 {
+  right: 128rpx;
+  top: 168rpx;
+  font-size: 30rpx;
+}
+
+.s3 {
+  right: 86rpx;
+  bottom: 300rpx;
+  font-size: 34rpx;
+}
+
+.in {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 140rpx 48rpx 0;
+  box-sizing: border-box;
+}
+
+.hero-wrap {
+  width: 440rpx;
+  height: 440rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  width: 100%;
+  height: 100%;
+}
+
+.name {
+  font-size: 54rpx;
+  font-weight: 700;
+  color: #4A3B2E;
+  letter-spacing: 3rpx;
+  margin-top: 4rpx;
+  text-shadow: 0 4rpx 0 rgba(255, 255, 255, 0.9);
+}
+
+.slogan {
+  font-size: 27rpx;
+  color: #A98A66;
+  margin-top: 16rpx;
+}
+
+/* 立体卡通按钮 */
+.btn {
+  margin-top: 56rpx;
+  height: 108rpx;
+  padding: 0 92rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(135deg, #FF9A4D 0%, #FF6B2C 100%);
+  color: #fff;
+  font-size: 35rpx;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16rpx 34rpx rgba(255, 107, 44, 0.38);
+}
+
+.btn:active {
+  transform: translateY(2rpx) scale(0.985);
+  box-shadow: 0 8rpx 20rpx rgba(255, 107, 44, 0.32);
+}
+
+.tip {
+  margin-top: 34rpx;
+  font-size: 23rpx;
+  color: #B79A76;
+}

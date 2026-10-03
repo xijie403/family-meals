@@ -1,0 +1,130 @@
+<view class="page {{total > 0 ? 'full' : ''}}">
+  <!-- 页面标题：与「点菜 / 菜单 / 统计」同一套头部结构 -->
+  <view class="hd">
+    <view class="hd-title"><text class="hd-emo">🍳</text>妈妈会做的菜</view>
+    <view class="hd-sub" wx:if="{{total > 0}}">共 {{total}} 道菜 · 点一行改，长按删，右侧「上移 / 置顶」调顺序</view>
+    <view class="hd-sub" wx:else>妈妈先把会做的菜录进来，点菜时才有得挑</view>
+  </view>
+
+  <view class="search">
+    <input
+      class="search-input"
+      placeholder="搜菜名或食材"
+      placeholder-class="ph"
+      value="{{kw}}"
+      bindinput="onKw"
+    />
+  </view>
+
+  <view class="body" wx:if="{{total > 0}}">
+    <!-- 左侧分类：与点菜页一致，只列真正有菜的分类；滑动右侧时高亮自动跟着走 -->
+    <scroll-view class="side" scroll-y="{{true}}" wx:if="{{!searching}}">
+      <view
+        wx:for="{{sideCats}}"
+        wx:key="key"
+        class="side-item {{spyKey === item.key ? 'on' : ''}}"
+        data-cat="{{item.key}}"
+        bindtap="pickCat"
+      >
+        <image class="side-ico" src="{{spyKey === item.key ? item.iconOn : item.icon}}" />
+        <view class="side-txt">{{item.label}}</view>
+      </view>
+    </scroll-view>
+
+    <scroll-view
+      class="main"
+      scroll-y="{{true}}"
+      scroll-into-view="{{mainTo}}"
+      scroll-with-animation="{{true}}"
+      bindscroll="onMainScroll"
+    >
+      <!-- 搜索态：跨分类的扁平结果，和点菜页一样收起左侧分类栏 -->
+      <block wx:if="{{searching}}">
+        <view class="search-line">全部分类 · 找到 {{hitCount}} 道</view>
+        <view
+          wx:for="{{list}}"
+          wx:key="_id"
+          class="row"
+          data-id="{{item._id}}"
+          data-name="{{item.name}}"
+          bindtap="goEdit"
+          bindlongpress="remove"
+        >
+          <image wx:if="{{item.cover}}" class="thumb" src="{{item.cover}}" mode="aspectFill" />
+          <view wx:else class="thumb thumb-ph"></view>
+          <view class="row-main">
+            <view class="row-title">{{item.name}}</view>
+            <view class="row-sub">
+              {{item._cat}}<block wx:if="{{item._ingCount > 0}}"> · {{item._ingCount}} 样食材</block>
+            </view>
+          </view>
+          <view class="arrow">›</view>
+        </view>
+        <view class="list-empty" wx:if="{{list.length === 0}}">
+          <view class="le-t">没找到「{{kw}}」</view>
+          <view class="le-s">换个词试试，或者点下面按钮把它加进来</view>
+        </view>
+      </block>
+
+      <!-- 常规态：按左侧分类顺序分组，滑到哪一组左侧就亮哪一组 -->
+      <block wx:else>
+        <view class="sec" wx:for="{{groups}}" wx:key="key" wx:for-item="g" id="sec-{{g.key}}">
+          <view class="sec-hd">
+            <image class="sec-ico" src="{{g.iconOn}}" />
+            <text class="sec-name">{{g.label}}</text>
+            <text class="sec-n">{{g.list.length}} 道</text>
+          </view>
+          <view
+            wx:for="{{g.list}}"
+            wx:key="_id"
+            class="row"
+            data-id="{{item._id}}"
+            data-name="{{item.name}}"
+            bindtap="goEdit"
+            bindlongpress="remove"
+          >
+            <image wx:if="{{item.cover}}" class="thumb" src="{{item.cover}}" mode="aspectFill" />
+            <view wx:else class="thumb thumb-ph"></view>
+            <view class="row-main">
+              <view class="row-title">{{item.name}}</view>
+              <view class="row-sub">
+                {{item._cat}}<block wx:if="{{item._ingCount > 0}}"> · {{item._ingCount}} 样食材</block>
+              </view>
+            </view>
+            <!-- 调顺序：只在本分类里挪。第一道两个按钮置灰（已经在最前了） -->
+            <view class="row-btns">
+              <view
+                class="rb {{index === 0 ? 'off' : ''}}"
+                data-id="{{item._id}}"
+                catchtap="moveUp"
+              >上移</view>
+              <view
+                class="rb {{index === 0 ? 'off' : ''}}"
+                data-id="{{item._id}}"
+                catchtap="moveTop"
+              >置顶</view>
+            </view>
+            <view class="arrow">›</view>
+          </view>
+        </view>
+      </block>
+
+      <view class="pad"></view>
+    </scroll-view>
+  </view>
+
+  <view class="empty" wx:if="{{total === 0 && !loading}}">
+    <view class="e-title">菜谱还是空的</view>
+    <view class="hint">这个小程序里所有的菜都得妈妈先录进来——先录够菜，点菜才有得挑。</view>
+    <view class="hint">照片存在手机相册里就行，一次可以选 9 张。</view>
+    <view class="btn" bindtap="addBatch">批量上传（一次选 9 张）</view>
+    <view class="btn ghost" bindtap="addOne">一次加一道菜</view>
+  </view>
+
+  <view class="bar-wrap" wx:if="{{total > 0}}">
+    <view class="act-row">
+      <view class="act ghost" bindtap="addOne">+ 一道菜</view>
+      <view class="act" bindtap="addBatch">批量上传（9 张）</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,1314 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>家庭点餐 · 改动预览</title>
+<style>/* ============================================================
+   栖栖家的菜谱 · 全局设计系统 v2（现代卡通风）
+   ------------------------------------------------------------
+   语言：奶油底 + 纯白浮层 + 柔和投影 + 圆润胶囊 + 糖果点缀
+   原则：不用粗描边、不用硬立体边，靠「柔和阴影 + 轻微抬升」表达层级
+   ============================================================ */
+
+:root {
+  /* —— 主色：糖果橙（渐变用于按钮/选中态）—— */
+  --brand: #FF7A33;
+  --brand-2: #FF9A4D;
+  --brand-3: #FF6B2C;
+  --brand-soft: #FFF1E6;
+  --brand-deep: #E0591A;
+
+  /* —— 分类 / 统计点缀色 —— */
+  --green: #4FB85F;
+  --yellow: #FFAE1A;
+  --blue: #4FA8E8;
+  --pink: #E45C8A;
+  --purple: #9E7BE0;
+
+  /* —— 中性 —— */
+  --bg: #FFF9F4;
+  --line: #F4EAE0;
+  --ink: #3D3229;
+  --ink-2: #6B5947;
+  --muted: #B3A492;
+
+  /* —— 柔和投影（替代描边）—— */
+  --sh-1: 0 4px 14px rgba(178, 140, 102, 0.09);
+  --sh-2: 0 8px 22px rgba(178, 140, 102, 0.13);
+  --sh-brand: 0 10px 24px rgba(255, 107, 44, 0.30);
+
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 30px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  min-height: 100vh;
+  padding-bottom: calc(180px + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ---------------- 页面标题（各 tab 页统一） ---------------- */
+
+.hd {
+  padding: 34px 34px 14px;
+}
+
+.hd-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.22;
+  color: var(--ink);
+  letter-spacing: 0.5px;
+}
+
+/* 标题旁的卡通贴纸：糖果圆角底 + 轻微倾斜，页面更活泼 */
+.hd-emo {
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+  border-radius: 24px;
+  background: var(--brand-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  line-height: 1;
+  transform: rotate(-6deg);
+  box-shadow: 0 6px 14px rgba(255, 140, 70, 0.2);
+}
+
+.hd-sub {
+  font-size: 25px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+
+/* ---------------- 胶囊标签 ----------------
+   注意：这里**不要**写 overflow-x: auto。
+   给 view 加 overflow-x:auto 后，只要内容比屏幕宽一点点，
+   就会在底部渲染出一条灰色横向滚动条（菜单页 .flt 就踩过这个坑）。
+   真要横向滚动请改用 scroll-view + show-scrollbar="{{false}}"。 */
+
+.tabs {
+  display: flex;
+  gap: 16px;
+  padding: 16px 30px;
+  flex-wrap: wrap;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 28px;
+  border-radius: 999px;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: #fff;
+  box-shadow: var(--sh-1);
+  flex-shrink: 0;
+}
+
+.tab-ico {
+  width: 34px;
+  height: 34px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.tab.on {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(255, 107, 44, 0.28);
+}
+
+/* ---------------- 卡片（浮层，不描边） ---------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  padding: 22px 30px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 28px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--sh-1);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* 选中：抬升 + 橙色光晕，不再用描边 */
+.card.on {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(255, 107, 44, 0.28);
+}
+
+.card.on .card-name {
+  color: var(--brand-deep);
+}
+
+.card-img {
+  width: 100%;
+  height: 200px;
+  background: #F6EFE7;
+  display: block;
+}
+
+.card-body {
+  padding: 16px 18px 20px;
+}
+
+.card-name {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.card-cat {
+  font-size: 22px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+/* 右上角序号：选中才出现，未选中显示一个「＋」 */
+.badge-seq {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  font-size: 26px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(255, 107, 44, 0.42);
+}
+
+.badge-seq.off {
+  background: rgba(255, 255, 255, 0.88);
+  color: #C0B2A0;
+  font-size: 32px;
+  font-weight: 400;
+  box-shadow: 0 4px 12px rgba(90, 60, 30, 0.14);
+}
+
+/* ---------------- 底部操作条（悬浮胶囊） ---------------- */
+
+.bar-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 14px 30px calc(18px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(255, 249, 244, 0), #FFF9F4 36%);
+  z-index: 20;
+}
+
+.bar {
+  height: 104px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 10px 28px rgba(178, 140, 102, 0.20);
+  color: var(--brand-deep);
+  font-weight: 700;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 38px;
+  box-sizing: border-box;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.bar.solid {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(255, 107, 44, 0.34);
+}
+
+.bar:active {
+  transform: translateY(2px) scale(0.995);
+  box-shadow: 0 6px 16px rgba(178, 140, 102, 0.18);
+}
+
+/* ---------------- 按钮 ---------------- */
+
+.btn {
+  margin: 30px 0 0;
+  padding: 28px 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: var(--sh-brand);
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+
+.btn:active {
+  transform: translateY(2px) scale(0.99);
+  box-shadow: 0 6px 16px rgba(255, 107, 44, 0.26);
+}
+
+.btn.ghost {
+  background: #fff;
+  color: var(--brand);
+  box-shadow: var(--sh-2);
+  margin-top: 22px;
+}
+
+/* ---------------- 表单输入（全站统一写法，别再改回去） ----------------
+   原生 <input> 必须「显式高度 + 只给左右内边距」。
+   反例：写 `padding: 26px 28px`（上下也留白）却不写 height ——
+   安卓上原生输入框的文字会被顶到顶边、上下被裁，占位文案和自己输入的字都显示不全。
+   正解：height + 左右 padding，垂直方向交给高度自己撑。 */
+.f-input {
+  display: block;
+  width: 100%;
+  height: 96px;
+  padding: 0 28px;
+  box-sizing: border-box;
+  font-size: 32px;
+  color: var(--ink);
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: 0 6px 18px rgba(178, 140, 102, 0.10);
+}
+
+.f-input-ph {
+  color: #C4B7A6;
+  font-size: 30px;
+}
+
+/* ---------------- 空状态 / 提示 ---------------- */
+
+.empty {
+  padding: 130px 60px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 28px;
+}
+
+.e-title {
+  font-size: 36px;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.hint {
+  font-size: 24px;
+  color: var(--muted);
+  padding: 14px 30px;
+  line-height: 1.75;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* ---------------- 通用列表行（菜谱页） ---------------- */
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 18px 20px;
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: var(--sh-1);
+  margin: 0 26px 16px;
+  box-sizing: border-box;
+  transition: transform 0.14s ease;
+}
+
+.row:active {
+  transform: scale(0.985);
+}
+
+.thumb {
+  width: 120px;
+  height: 120px;
+  border-radius: 22px;
+  background: #F6EFE7;
+  flex-shrink: 0;
+}
+
+.row-title {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.row-sub {
+  font-size: 24px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: #EFE7DE; font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+.head { padding: 24px 26px 6px; max-width: 1500px; }
+.head h1 { font-size: 22px; margin: 0 0 8px; color: #3D3229; }
+.head p { font-size: 14px; line-height: 1.8; color: #6B5947; margin: 6px 0; }
+.head code { background: #fff; padding: 1px 6px; border-radius: 6px; }
+.frames { display: flex; flex-wrap: wrap; gap: 26px; padding: 20px 26px 40px; align-items: flex-start; }
+.frame-wrap > .frame-tag { font: 700 15px/1.5 -apple-system, "PingFang SC", sans-serif; color: #6B5947; margin-bottom: 8px; }
+.frame { position: relative; width: 750px; overflow: hidden; background: var(--bg); color: var(--ink); font-size: 30px; line-height: 1.6; }
+.frame .sheet, .frame .sheet-mask, .frame .bar-wrap, .frame .days-fade, .frame .cal { position: absolute; }
+.frame .bar-wrap { padding-bottom: 18px; }
+.frame .days { overflow: hidden; }
+</style>
+<style>.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-bottom: 0;
+  box-sizing: border-box;
+  background: var(--bg);
+}
+
+/* 头部沿用全局 .hd，这里只收紧下边距 */
+
+.hd {
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+/* 标题左、搜菜按钮右，按钮不占额外高度 */
+.hd-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.hd-l {
+  flex: 1;
+  min-width: 0;
+}
+
+.hd-search {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 64px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--sh-1);
+  color: var(--brand-deep);
+  font-size: 25px;
+  font-weight: 600;
+  transition: background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.hd-search.on {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(255, 107, 44, 0.28);
+}
+
+/* 放大镜：一个圆环 + 一根斜柄，纯 CSS 画，不用图片 */
+.si {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: var(--brand-deep);
+}
+
+.hd-search.on .si {
+  color: #fff;
+}
+
+.si-grey {
+  color: #C4B6A4;
+}
+
+.si-lens {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  border: 3px solid currentColor;
+  box-sizing: border-box;
+}
+
+.si-grip {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+  width: 11px;
+  height: 3px;
+  border-radius: 3px;
+  background: currentColor;
+  transform: rotate(45deg);
+}
+
+/* ---------------- 搜索框 ---------------- */
+
+.sbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 4px 34px 12px;
+}
+
+.sbar-box {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 76px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--sh-1);
+}
+
+.sbar-input {
+  flex: 1;
+  min-width: 0;
+  /* 原生 input 必须给显式高度，否则安卓上文字会被裁 */
+  height: 76px;
+  font-size: 28px;
+  color: var(--ink);
+}
+
+.sbar-ph {
+  color: #C4B6A4;
+  font-size: 27px;
+}
+
+.sbar-clear {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #F1E7DC;
+  color: #9A8570;
+  font-size: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sbar-cancel {
+  flex-shrink: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--brand-deep);
+}
+
+.search-line {
+  font-size: 24px;
+  color: var(--muted);
+  padding: 2px 26px 14px;
+}
+
+/* ---------------- 日期条 + 选日期 ---------------- */
+
+.days-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 4px 0 12px;
+}
+
+/* 这一层「可收缩的盒子」是必须的，别删：
+   flex 子项默认 min-width:auto，而 scroll-view 里是 white-space:nowrap 的长条内容，
+   会把 scroll-view 撑到内容全宽（15 天 ≈ 1650px），
+   于是右边的「更多」被整个挤出屏幕 —— 表现就是「看不到日历按钮」。
+   套一层 flex:1 + min-width:0 + overflow:hidden 的盒子，scroll-view 才会只占剩余宽度。 */
+.days-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* 日期条的宽度账（改任何一个数都要重算，别拍脑袋改）：
+   750 = 26（.days padding-left）
+       + 600（6 天 ×(90 宽 + 10 间距)，第 6 格自己那 10px 间距也在里面）
+       + 16（.days padding-right，被遮罩盖着）
+       + 92（「更多」宽）+ 16（「更多」右间距）
+   所以默认正好完整显示 6 天，第 7 天从 x=626 开始，恰好藏在 16px 的遮罩后面，一点都不露。 */
+.days {
+  width: 100%;
+  white-space: nowrap;
+  padding: 8px 16px 8px 26px;
+  box-sizing: border-box;
+}
+
+/* 盖在最后一格位置上的同色遮罩（颜色必须等于页面底色 --bg，否则会看到一条色带） */
+.days-fade {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background: var(--bg);
+  pointer-events: none;
+}
+
+.day {
+  display: inline-block;
+  width: 90px;
+  margin-right: 10px;
+  padding: 13px 0 11px;
+  border-radius: 24px;
+  text-align: center;
+  box-sizing: border-box;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(178, 140, 102, 0.07);
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* 今天（还没被选中时）：淡淡的橙底，一眼就能找到「今天」这个锚点。
+   注意顺序：这段必须在 .day.on 之前，选中时才会被选中态的渐变盖住。 */
+.day.today {
+  background: var(--brand-soft);
+}
+
+.day-tag {
+  font-size: 22px;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.day-num {
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.day.today .day-tag {
+  color: #E39A6E;
+}
+
+.day.today .day-num {
+  color: var(--brand-deep);
+}
+
+.day-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: 6px auto 0;
+  background: transparent;
+}
+
+.day-dot.has {
+  background: #FFC08F;
+}
+
+/* 选中的一天：渐变胶囊 + 橙色光晕 */
+.day.on {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  box-shadow: 0 10px 20px rgba(255, 107, 44, 0.32);
+}
+
+.day.on .day-tag,
+.day.on .day-num {
+  color: #fff;
+}
+
+.day.on .day-tag {
+  opacity: 0.88;
+}
+
+.day.on .day-dot.has {
+  background: #fff;
+}
+
+/* 过去的日子：文字变浅，不做整块置灰 */
+.day.past .day-num {
+  color: #CFC3B3;
+}
+
+.day.past .day-tag {
+  color: #D8CCBD;
+}
+
+.day.past.day.on .day-num,
+.day.past.day.on .day-tag {
+  color: #fff;
+}
+
+/* 日期条右侧的「更多」：高度和圆角刻意跟日期格对齐，
+   这样整条看上去是一排齐整的方块，不会像贴着一个小药丸那样浮着。 */
+.pick {
+  flex-shrink: 0;
+  margin-right: 16px;
+  height: 114px;
+  padding: 0 24px;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(178, 140, 102, 0.14);
+  color: var(--brand-deep);
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.pick:active {
+  transform: scale(0.96);
+}
+
+/* 「更多」：常驻在最右，打开日历（日历底部有「回到今天」）。
+   宽度写死 92px（不靠文字撑），日期条才好按整数格对齐：
+   每天 100px × 6 天刚好排满，不会出现半截卡片。 */
+.pick.more {
+  width: 92px;
+  padding: 0;
+  background: #FFE7D5;
+  color: var(--brand-deep);
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(255, 140, 70, 0.16);
+}
+
+/* ---------------- 左分类 / 右菜品 ---------------- */
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.side {
+  width: 184px;
+  flex-shrink: 0;
+  background: #FFF4EA;
+  padding: 12px 0;
+  box-sizing: border-box;
+}
+
+.side-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 0 12px 8px;
+  padding: 16px 6px;
+  border-radius: 26px;
+  font-size: 25px;
+  font-weight: 600;
+  color: #9A8570;
+  transition: all 0.18s ease;
+}
+
+.side-ico {
+  width: 50px;
+  height: 50px;
+  display: block;
+}
+
+.side-txt {
+  line-height: 1.2;
+}
+
+/* 选中分类：白色浮起的小卡，不再用左侧色条 */
+.side-item.on {
+  background: #fff;
+  color: var(--brand-deep);
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(255, 150, 90, 0.22);
+}
+
+.main {
+  flex: 1;
+  background: transparent;
+  padding: 2px 0 0;
+  box-sizing: border-box;
+}
+
+/* 按分类分组：分组标题 + 两列网格（滑到哪一组，左侧就亮哪一组） */
+.sec {
+  padding-bottom: 4px;
+}
+
+.sec-hd {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 26px 10px;
+}
+
+.sec-ico {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.sec-name {
+  font-size: 29px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sec-n {
+  font-size: 22px;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  /* 显式写 padding：不写会被 app.wxss 里 .grid 的 padding 继承，导致卡片和分组标题错位 */
+  padding: 0 26px 10px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 28px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sh-1);
+  /* 只过渡颜色与阴影：不做位移，切换时卡片尺寸/位置完全不变 */
+  transition: background 0.16s ease, box-shadow 0.16s ease;
+}
+
+/* 选中：只换底色 + 橙色光晕。
+   关键：不抬升、不加描边、不改内边距 —— 卡片高度与位置和未选中一模一样，
+   所以反复勾选不会让页面跳动。 */
+.card.on {
+  background: var(--brand-soft);
+  box-shadow: 0 8px 22px rgba(255, 107, 44, 0.26);
+}
+
+.card-img {
+  width: 100%;
+  height: 240px;
+  display: block;
+  background: #F6EFE7;
+  object-fit: cover;
+}
+
+.card-ph {
+  background: #F6EFE7;
+}
+
+.card-name {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--ink);
+  /* 固定行高 + 最小高度：菜名永远占一行，短名长名都是同样的高度 */
+  line-height: 36px;
+  min-height: 36px;
+  padding: 14px 16px 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card.on .card-name {
+  color: var(--brand-deep);
+}
+
+/* 固定最小高度：即使某道菜没填分类，也不会比其他卡片矮，整行卡片高度一致 */
+.card-sub {
+  font-size: 20px;
+  color: var(--muted);
+  padding: 0 16px 16px;
+  min-height: 20px;
+  line-height: 1.5;
+}
+
+.list-empty {
+  padding: 120px 26px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 26px;
+}
+
+.le-t {
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.le-s {
+  font-size: 24px;
+  color: var(--muted);
+  margin-top: 10px;
+  line-height: 1.7;
+}
+
+.pad {
+  height: 200px;
+}
+
+.bar {
+  font-weight: 700;
+}
+
+/* ---------------- 已点菜单弹层 ---------------- */
+
+.sheet-mask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(60, 44, 32, 0.40);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+  z-index: 40;
+}
+
+.sheet-mask.on {
+  opacity: 1;
+  visibility: visible;
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 41;
+  background: var(--bg);
+  border-radius: 44px 44px 0 0;
+  box-shadow: 0 -12px 40px rgba(90, 60, 30, 0.16);
+  display: flex;
+  flex-direction: column;
+  max-height: 78vh;
+  padding-bottom: env(safe-area-inset-bottom);
+  transform: translateY(103%);
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.sheet.up {
+  transform: translateY(0);
+}
+
+.sheet-hd {
+  position: relative;
+  flex-shrink: 0;
+  padding: 34px 32px 22px;
+}
+
+/* 右侧两个按钮（清空 + ✕）都要留位置，别让标题/副标题钻到按钮底下 */
+.sheet-hd-l {
+  padding-right: 210px;
+}
+
+.sheet-ttl {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.sheet-sub {
+  font-size: 23px;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+/* 「清空」：从原来的底部搬到了标题右边。
+   弹层里已经没有「确定」按钮了（点一下就已经存好），
+   所以这里只留一个不显眼但找得到的清空入口。 */
+.sheet-clear {
+  position: absolute;
+  right: 106px;
+  top: 26px;
+  height: 64px;
+  padding: 0 26px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--sh-1);
+  color: #8A7660;
+  font-size: 25px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.sheet-clear:active {
+  transform: scale(0.96);
+}
+
+.sheet-x {
+  position: absolute;
+  right: 24px;
+  top: 26px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #FFF1E6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #C08D66;
+  font-size: 30px;
+}
+
+.sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 0 28px;
+  box-sizing: border-box;
+}
+
+.mrow {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 22px;
+  margin-bottom: 14px;
+  background: #fff;
+  border-radius: 26px;
+  box-shadow: var(--sh-1);
+}
+
+.mseq {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mthumb {
+  width: 96px;
+  height: 96px;
+  border-radius: 20px;
+  background: #F6EFE7;
+  flex-shrink: 0;
+  display: block;
+  object-fit: cover;
+}
+
+.mph {
+  background: #F6EFE7;
+}
+
+.mmain {
+  flex: 1;
+  min-width: 0;
+}
+
+.mname {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.msub {
+  font-size: 22px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.mdel {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: #FFF3EC;
+  color: #DD7B52;
+  font-size: 32px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sheet-empty {
+  padding: 90px 40px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 26px;
+}
+
+/* 弹层底部没有按钮了，最后一条菜离底边留点空 */
+.mpad {
+  height: 40px;
+}
+
+/* ---------------- 日历弹层（日期条右侧「更多」） ---------------- */
+
+.cal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 51;
+  background: var(--bg);
+  border-radius: 44px 44px 0 0;
+  box-shadow: 0 -12px 40px rgba(90, 60, 30, 0.16);
+  padding-bottom: calc(20px + env(safe-area-inset-bottom));
+  transform: translateY(103%);
+  transition: transform 0.28s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.cal.up {
+  transform: translateY(0);
+}
+
+.cal-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 34px 14px;
+}
+
+.cal-nav {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--sh-1);
+  color: var(--brand-deep);
+  font-size: 34px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-nav:active {
+  transform: scale(0.94);
+}
+
+.cal-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cal-wds {
+  display: flex;
+  padding: 8px 24px 0;
+}
+
+.cal-wd {
+  flex: 1;
+  text-align: center;
+  font-size: 22px;
+  color: var(--muted);
+}
+
+/* 一行 7 格：14.2857% × 7 = 100%，左右各留 24px */
+.cal-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 6px 24px 8px;
+}
+
+.cal-c {
+  position: relative;
+  width: 14.2857%;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-n {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: var(--ink);
+}
+
+/* 过去的日子文字变浅，但仍可点（补记用） */
+.cal-c.past .cal-n {
+  color: #CFC3B3;
+}
+
+/* 今天：一圈橙色细边，不抢选中态 */
+.cal-c.today .cal-n {
+  box-shadow: inset 0 0 0 3px var(--brand-2);
+  color: var(--brand-deep);
+  font-weight: 700;
+}
+
+/* 选中的那一天：渐变橙圆 */
+.cal-c.sel .cal-n {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand-3));
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(255, 107, 44, 0.32);
+}
+
+/* 超出「前后一年」范围的日子：淡到几乎看不见，点了也不会跳 */
+.cal-c.off .cal-n {
+  color: #E4DACD;
+}
+
+.cal-c.off.today .cal-n {
+  box-shadow: inset 0 0 0 3px #EDE3D8;
+  color: #D8CCBD;
+}
+
+/* 那天已经点过菜：数字下面一个小圆点（和日期条同一个信号） */
+.cal-dot {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  margin-left: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFC08F;
+}
+
+.cal-c.sel .cal-dot {
+  background: #fff;
+}
+
+.cal-ft {
+  padding: 10px 34px 6px;
+}
+
+.cal-today {
+  height: 92px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--sh-1);
+  color: var(--brand-deep);
+  font-size: 28px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-today:active {
+  transform: scale(0.99);
+}
+</style>
+<style>.frame .hd { padding-bottom: 4px; }</style>
+</head>
+<body>
+<div class="head">
+  <h1>家庭点餐 · 点菜页这轮改动</h1>
+  <p>这一页直接读项目里真实的 <code>.wxss</code> 渲染，<code>rpx</code> 按 1:1 换算、宽度固定 750 逻辑像素，
+     所以排版和真机一致。真机观感仍以你手机为准。</p>
+  <p>四处：① 日期条默认完整显示 6 天（含「后天」）＋「更多」和日期格对齐　② 「回到今天」搬进日历底部　
+     ③ 已点菜单弹层底部不再有「确定」，清空挪到右上角　④ 底部入口只剩「看菜单」</p>
+</div>
+<div class="frames">
+
+  <div class="frame-wrap">
+    <div class="frame-tag">① 日期条：默认 6 天全部完整，右边「更多」同高同圆角</div>
+    <div class="frame" style="height:300px">
+  <div class="hd"><div class="hd-row"><div class="hd-l">
+    <div class="hd-title"><span class="hd-emo">🍚</span>今天想吃点啥</div>
+    <div class="hd-sub">明天想吃啥？先安排上～ 🍀</div>
+  </div><div class="hd-search"><span>搜菜</span></div></div></div>
+  
+  <div class="days-wrap">
+    <div class="days-box">
+      <div class="days"><div class="day  past "><div class="day-tag">周三</div><div class="day-num">30</div><div class="day-dot has"></div></div><div class="day  past "><div class="day-tag">10月</div><div class="day-num">1</div><div class="day-dot "></div></div><div class="day  past "><div class="day-tag">昨天</div><div class="day-num">2</div><div class="day-dot "></div></div><div class="day   today"><div class="day-tag">今天</div><div class="day-num">3</div><div class="day-dot "></div></div><div class="day on  "><div class="day-tag">明天</div><div class="day-num">4</div><div class="day-dot has"></div></div><div class="day   "><div class="day-tag">后天</div><div class="day-num">5</div><div class="day-dot "></div></div><div class="day   "><div class="day-tag">周日</div><div class="day-num">6</div><div class="day-dot "></div></div><div class="day   "><div class="day-tag">周一</div><div class="day-num">7</div><div class="day-dot "></div></div><div class="day   "><div class="day-tag">周二</div><div class="day-num">8</div><div class="day-dot "></div></div><div class="day   "><div class="day-tag">9月</div><div class="day-num">9</div><div class="day-dot "></div></div></div>
+      <div class="days-fade"></div>
+    </div>
+    <div class="pick more">更多</div>
+  </div>
+</div>
+  </div>
+
+
+  <div class="frame-wrap">
+    <div class="frame-tag">② 点「更多」开的日历：「回到今天」在底部</div>
+    <div class="frame" style="height:660px">
+  <div class="sheet-mask on"></div>
+  <div class="cal up">
+    <div class="cal-hd"><div class="cal-nav">‹</div><div class="cal-title">2026年10月</div><div class="cal-nav">›</div></div>
+    <div class="cal-wds"><div class="cal-wd">日</div><div class="cal-wd">一</div><div class="cal-wd">二</div><div class="cal-wd">三</div><div class="cal-wd">四</div><div class="cal-wd">五</div><div class="cal-wd">六</div></div>
+    <div class="cal-grid"><div class="cal-c blank"><div class="cal-n"></div></div><div class="cal-c blank"><div class="cal-n"></div></div><div class="cal-c blank"><div class="cal-n"></div></div><div class="cal-c blank"><div class="cal-n"></div></div><div class="cal-c   past"><div class="cal-n">1</div><div class="cal-dot"></div></div><div class="cal-c   past"><div class="cal-n">2</div></div><div class="cal-c  today "><div class="cal-n">3</div></div><div class="cal-c sel  "><div class="cal-n">4</div><div class="cal-dot"></div></div><div class="cal-c   "><div class="cal-n">5</div></div><div class="cal-c   "><div class="cal-n">6</div></div><div class="cal-c   "><div class="cal-n">7</div></div><div class="cal-c   "><div class="cal-n">8</div></div><div class="cal-c   "><div class="cal-n">9</div></div><div class="cal-c   "><div class="cal-n">10</div></div><div class="cal-c   "><div class="cal-n">11</div></div><div class="cal-c   "><div class="cal-n">12</div></div><div class="cal-c   "><div class="cal-n">13</div></div><div class="cal-c   "><div class="cal-n">14</div></div><div class="cal-c   "><div class="cal-n">15</div></div><div class="cal-c   "><div class="cal-n">16</div></div><div class="cal-c   "><div class="cal-n">17</div></div><div class="cal-c   "><div class="cal-n">18</div></div><div class="cal-c   "><div class="cal-n">19</div></div><div class="cal-c   "><div class="cal-n">20</div></div><div class="cal-c   "><div class="cal-n">21</div></div><div class="cal-c   "><div class="cal-n">22</div></div><div class="cal-c   "><div class="cal-n">23</div></div><div class="cal-c   "><div class="cal-n">24</div></div><div class="cal-c   "><div class="cal-n">25</div></div><div class="cal-c   "><div class="cal-n">26</div></div><div class="cal-c   "><div class="cal-n">27</div></div><div class="cal-c   "><div class="cal-n">28</div></div><div class="cal-c   "><div class="cal-n">29</div></div><div class="cal-c   "><div class="cal-n">30</div></div><div class="cal-c   "><div class="cal-n">31</div></div></div>
+    <div class="cal-ft"><div class="cal-today">回到今天</div></div>
+  </div></div>
+  </div>
+
+
+  <div class="frame-wrap">
+    <div class="frame-tag">③ 已点菜单弹层：没有「确定」了，清空在右上角</div>
+    <div class="frame" style="height:640px">
+  <div class="sheet-mask on"></div>
+  <div class="sheet up">
+    <div class="sheet-hd">
+      <div class="sheet-hd-l">
+        <div class="sheet-ttl">10月4日 的菜单</div>
+        <div class="sheet-sub">明天 · 共 4 道 · 选完自动保存</div>
+      </div>
+      <div class="sheet-clear">清空</div>
+      <div class="sheet-x">✕</div>
+    </div>
+    <div class="sheet-body">
+      
+  <div class="mrow">
+    <div class="mseq">1</div>
+    <div class="mthumb mph"></div>
+    <div class="mmain"><div class="mname">蛋饼</div><div class="msub">早餐</div></div>
+    <div class="mdel">×</div>
+  </div>
+  <div class="mrow">
+    <div class="mseq">2</div>
+    <div class="mthumb mph"></div>
+    <div class="mmain"><div class="mname">卤牛肉</div><div class="msub">大荤</div></div>
+    <div class="mdel">×</div>
+  </div>
+  <div class="mrow">
+    <div class="mseq">3</div>
+    <div class="mthumb mph"></div>
+    <div class="mmain"><div class="mname">红烧鲈鱼</div><div class="msub">大荤</div></div>
+    <div class="mdel">×</div>
+  </div>
+  <div class="mrow">
+    <div class="mseq">4</div>
+    <div class="mthumb mph"></div>
+    <div class="mmain"><div class="mname">清炒西兰花</div><div class="msub">蔬菜</div></div>
+    <div class="mdel">×</div>
+  </div>
+      <div class="mpad"></div>
+    </div>
+  </div></div>
+  </div>
+
+
+  <div class="frame-wrap">
+    <div class="frame-tag">④ 底部入口：只剩「看菜单 ›」</div>
+    <div class="frame" style="height:200px">
+  <div style="position:absolute;left:0;right:0;bottom:0" class="bar-wrap">
+    <div class="bar solid"><text>已点 4 道</text><text>看菜单 ›</text></div>
+  </div>
+</div>
+  </div>
+</div>
+</body></html>
