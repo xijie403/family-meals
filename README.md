@@ -122,5 +122,9 @@ git push --tags
 **Q：云开发按钮是灰的怎么办？** 见 [docs/cloud-storage-guide.md](./docs/cloud-storage-guide.md)，
 一句话：当前是测试号，换成正式小程序即可（免费，约 10 分钟）。
 
+**Q：底部图标显示成"破图"方块怎么办？** 文字正常、只有图标破图，**通常是开发者工具的会话故障**
+（模拟器读项目源文件的请求被 403 拒绝），**不是代码问题**：按 **⌘Q 完全退出开发者工具**再重新打开、
+编译即可。详细诊断与兜底方案见 👉 [docs/troubleshooting.md](./docs/troubleshooting.md)。
+
 ## 许可
 [MIT](./LICENSE) © 2026 家庭点餐小程序作者
